@@ -21,6 +21,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
+    }
+
+    /* Fullscreen image container */
+    .image-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     /* Fullscreen image */
@@ -29,6 +40,25 @@
         height: 100vh;
         object-fit: cover; /* fills screen, crops if needed */
         user-select: none;
+    }
+
+    /* Precise live timestamp overlay matching the original text style */
+    #live-timestamp {
+        position: absolute;
+        bottom: 31px; /* Exact placement inside the bottom grey bar */
+        left: 32%;
+        transform: translateX(-50%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #7a7a7a; /* Matches the clean grey text color of the timestamp */
+        letter-spacing: -0.2px;
+        display: none; /* Hidden on photo 1 */
+        user-select: none;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 5;
+        -webkit-font-smoothing: antialiased;
     }
 
     /* Invisible tap zones */
@@ -47,7 +77,12 @@
 </head>
 <body>
 
-<img id="photo" src="photos/1.jpg" alt="Photo Viewer">
+<div class="image-container">
+    <img id="photo" src="1.jpg" alt="Photo Viewer">
+    
+    <!-- Crisp live timestamp overlay covering only the date/time text -->
+    <div id="live-timestamp">Monday, Jan 26, at 3:38 PM</div>
+</div>
 
 <div class="tap-zone left" onclick="prev()"></div>
 <div class="tap-zone right" onclick="next()"></div>
@@ -57,9 +92,27 @@
     const total = 2; // total number of photos
 
     const photo = document.getElementById("photo");
+    const timestampDiv = document.getElementById("live-timestamp");
+
+    function updateTime() {
+        const now = new Date();
+        const optionsDate = { weekday: 'long', month: 'short', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-US', optionsDate);
+        const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const timeStr = now.toLocaleTimeString('en-US', optionsTime);
+
+        timestampDiv.textContent = `${dateStr}, at ${timeStr}`;
+    }
 
     function show() {
-        photo.src = `photos/${current}.jpg`;
+        if (current === 1) {
+            photo.src = "1.jpg";
+            timestampDiv.style.display = "none";
+        } else {
+            updateTime();
+            photo.src = "2.jpg";
+            timestampDiv.style.display = "block";
+        }
     }
 
     function next() {
