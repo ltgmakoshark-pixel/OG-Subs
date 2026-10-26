@@ -24,16 +24,6 @@
         position: relative;
     }
 
-    /* Fullscreen image container */
-    .image-container {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
     /* Fullscreen image */
     img {
         width: 100vw;
@@ -42,16 +32,16 @@
         user-select: none;
     }
 
-    /* Precise live timestamp overlay matching the original text style */
+    /* Precise live timestamp overlay matching the exact position and font style of 2.jpg */
     #live-timestamp {
         position: absolute;
-        bottom: 31px; /* Exact placement inside the bottom grey bar */
-        left: 32%;
+        bottom: 37px;
+        left: 45.5%;
         transform: translateX(-50%);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 500;
-        color: #7a7a7a; /* Matches the clean grey text color of the timestamp */
+        color: #d8d8d8;
         letter-spacing: -0.2px;
         display: none; /* Hidden on photo 1 */
         user-select: none;
@@ -77,12 +67,10 @@
 </head>
 <body>
 
-<div class="image-container">
-    <img id="photo" src="1.jpg" alt="Photo Viewer">
-    
-    <!-- Crisp live timestamp overlay covering only the date/time text -->
-    <div id="live-timestamp">Monday, Jan 26, at 3:38 PM</div>
-</div>
+<img id="photo" src="photos/1.jpg" alt="Photo Viewer">
+
+<!-- Live timestamp overlay for the second photo -->
+<div id="live-timestamp">Monday, Jan 26, at 3:38 PM</div>
 
 <div class="tap-zone left" onclick="prev()"></div>
 <div class="tap-zone right" onclick="next()"></div>
@@ -105,13 +93,12 @@
     }
 
     function show() {
-        if (current === 1) {
-            photo.src = "1.jpg";
-            timestampDiv.style.display = "none";
-        } else {
+        photo.src = `photos/${current}.jpg`;
+        if (current === 2) {
             updateTime();
-            photo.src = "2.jpg";
             timestampDiv.style.display = "block";
+        } else {
+            timestampDiv.style.display = "none";
         }
     }
 
@@ -142,6 +129,9 @@
     });
 
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
